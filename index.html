@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RON - Super AI by Ronish</title>
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --dark-yellow: #F0C419;
+            --bg-white: #FFFFFF;
+            --bg-light: #FFFDF0;
+            --text-dark: #333333;
+            --gray-border: #E5E5E5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Container Card */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            background: var(--bg-white);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(240, 196, 25, 0.2);
+        }
+
+        @media (min-width: 481px) {
+            .app-container {
+                height: 85vh;
+                border-radius: 16px;
+                border: 2px solid var(--primary-yellow);
+            }
+        }
+
+        /* Header */
+        header {
+            background: var(--primary-yellow);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand span {
+            font-size: 12px;
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #555;
+        }
+
+        /* Screens */
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Auth Screen */
+        .auth-screen {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #222;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-border);
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--dark-yellow);
+            box-shadow: 0 0 5px rgba(240, 196, 25, 0.4);
+        }
+
+        button {
+            background: var(--primary-yellow);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            color: #222;
+        }
+
+        button:hover {
+            background: var(--dark-yellow);
+        }
+
+        /* Chat Screen */
+        .chat-box {
+            flex: 1;
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid #FDF0A6;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.ai {
+            background: #FFFFFF;
+            align-self: flex-start;
+            border: 1px solid #EFEFEF;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .message.user {
+            background: var(--primary-yellow);
+            color: #111;
+            align-self: flex-end;
+            font-weight: 500;
+        }
+
+        .message img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+
+        /* Chat Input Area */
+        .input-area {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .file-upload-btn {
+            background: #eee;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .file-upload-btn:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <h2>RON AI</h2>
+                <span>v3.0 Super</span>
+            </div>
+            <div id="user-display" class="hidden" style="font-size: 13px; font-weight: normal;"></div>
+        </header>
+
+        <!-- SCREEN 1: LOGIN / SIGN UP -->
+        <div id="screen-auth" class="screen auth-screen">
+            <div>
+                <h1>Welcome to RON</h1>
+                <p class="subtitle">Your Super Intelligent Study & Multi-Purpose Partner<br><small>Created by Ronish</small></p>
+            </div>
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" id="username-input" placeholder="Enter your name...">
+                <select id="language-select">
+                    <option value="English">English</option>
+                    <option value="Spanish">Español (Spanish)</option>
+                    <option value="French">Français (French)</option>
+                    <option value="Mandarin">中文 (Mandarin)</option>
+                    <option value="Hindi">हिन्दी (Hindi)</option>
+                    <option value="Arabic">العربية (Arabic)</option>
+                    <option value="Japanese">日本語 (Japanese)</option>
+                    <option value="German">Deutsch (German)</option>
+                </select>
+                <button onclick="startRonAI()">Initialize RON AI</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: MAIN CHAT & STUDY DASHBOARD -->
+        <div id="screen-chat" class="screen hidden">
+            <div id="chat-box" class="chat-box">
+                <!-- Dynamic messages go here -->
+            </div>
+
+            <div id="image-preview-container" class="hidden" style="padding-bottom: 8px; font-size: 12px; color: #555;">
+                📎 Photo attached ready to send.
+            </div>
+
+            <div class="input-area">
+                <label for="image-input" class="file-upload-btn" title="Upload Photo">📷</label>
+                <input type="file" id="image-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                
+                <input type="text" id="user-input" placeholder="Ask RON anything or request a study session..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" style="width: auto; padding: 12px 18px;">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = { name: "", language: "English" };
+        let selectedImageBase64 = null;
+
+        function startRonAI() {
+            const nameInput = document.getElementById("username-input").value.trim();
+            const langInput = document.getElementById("language-select").value;
+
+            if (!nameInput) {
+                alert("Please enter your name to proceed, boss!");
+                return;
+            }
+
+            currentUser.name = nameInput;
+            currentUser.language = langInput;
+
+            // Switch screens
+            document.getElementById("screen-auth").classList.add("hidden");
+            document.getElementById("screen-chat").classList.remove("hidden");
+            
+            // Show user info in header
+            const userDisplay = document.getElementById("user-display");
+            userDisplay.textContent = `User: ${currentUser.name} (${currentUser.language})`;
+            userDisplay.classList.remove("hidden");
+
+            // Initial greeting from RON created by Ronish
+            appendMessage(`Hello ${currentUser.name}! I am **RON**, the super-powered AI created by **Ronish**. I am locked into **${currentUser.language}** mode. Whether you want to study complex subjects, solve edits, or explore multi-purpose tasks, I'm here. How can I assist you today?`, 'ai');
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImageBase64 = e.target.result;
+                    document.getElementById("image-preview-container").classList.remove("hidden");
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function appendMessage(text, sender, imgUrl = null) {
+            const chatBox = document.getElementById("chat-box");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", sender);
+
+            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Basic bold markdown parsing
+            messageDiv.innerHTML = formattedText;
+
+            if (imgUrl) {
+                const img = document.createElement("img");
+                img.src = imgUrl;
+                messageDiv.appendChild(img);
+            }
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const inputField = document.getElementById("user-input");
+            const text = inputField.value.trim();
+
+            if (!text && !selectedImageBase64) return;
+
+            // Display User Message
+            appendMessage(text || "Uploaded an image for analysis.", 'user', selectedImageBase64);
+            
+            const currentImg = selectedImageBase64;
+            
+            // Reset inputs
+            inputField.value = "";
+            selectedImageBase64 = null;
+            document.getElementById("image-preview-container").classList.add("hidden");
+            document.getElementById("image-input").value = "";
+
+            // Simulate RON Processing Super-Intelligently
+            setTimeout(() => {
+                let aiResponse = generateRonResponse(text, currentImg);
+                appendMessage(aiResponse, 'ai');
+            }, 600);
+        }
+
+        function generateRonResponse(query, img) {
+            let lowerQuery = query.toLowerCase();
+
+            if (img) {
+                return `[Photo Analyzed in ${currentUser.language}] Boss ${currentUser.name}, I've processed this image using my multi-purpose visual engine created by Ronish. It contains visual text or study material. Would you like me to summarize it, solve equations found within it, or convert notes from it?`;
+            }
+
+            if (lowerQuery.includes('study') || lowerQuery.includes('exam') || lowerQuery.includes('learn')) {
+                return `As your dedicated study partner, I am ready to break down any topic for you in ${currentUser.language}. Give me a subject (like Mathematics, Physics, Programming, or History) and I will build a customized revision plan for you!`;
+            }
+
+            if (lowerQuery.includes('edit') || lowerQuery.includes('writing') || lowerQuery.includes('code')) {
+                return `[Editing Mode Active]: Send over your text, code snippet, or layout concepts. Ronish designed me to optimize and polish your work with hyper-accuracy!`;
+            }
+
+            return `I copy that, ${currentUser.name}. Operating at maximum capacity in **${currentUser.language}**. As RON, built by Ronish, I'm tracking your request. Let me know if you want to dive deeper into studies, document editing, or any other multi-purpose challenge!`;
+        }
+    </script>
+</body>
+</html>
