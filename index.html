@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RON - Super AI by Ronish</title>
+    <title>RAZ 73 - Super Voice AI by Ronish</title>
     <style>
         :root {
             --primary-yellow: #FFD700;
@@ -35,7 +35,6 @@
             display: none !important;
         }
 
-        /* Container Card */
         .app-container {
             width: 100%;
             max-width: 480px;
@@ -54,7 +53,6 @@
             }
         }
 
-        /* Header */
         header {
             background: var(--primary-yellow);
             padding: 15px 20px;
@@ -72,14 +70,13 @@
         }
 
         .brand span {
-            font-size: 12px;
+            font-size: 11px;
             background: #fff;
             padding: 2px 6px;
             border-radius: 4px;
             color: #555;
         }
 
-        /* Screens */
         .screen {
             flex: 1;
             display: flex;
@@ -88,7 +85,6 @@
             overflow-y: auto;
         }
 
-        /* Auth Screen */
         .auth-screen {
             justify-content: center;
             align-items: center;
@@ -134,7 +130,6 @@
             background: var(--dark-yellow);
         }
 
-        /* Chat Screen */
         .chat-box {
             flex: 1;
             background: var(--bg-light);
@@ -149,7 +144,7 @@
         }
 
         .message {
-            max-width: 80%;
+            max-width: 85%;
             padding: 10px 14px;
             border-radius: 12px;
             font-size: 14px;
@@ -176,14 +171,13 @@
             margin-top: 5px;
         }
 
-        /* Chat Input Area */
         .input-area {
             display: flex;
             gap: 8px;
             align-items: center;
         }
 
-        .file-upload-btn {
+        .action-btn {
             background: #eee;
             padding: 12px;
             border-radius: 8px;
@@ -192,10 +186,24 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
+            border: none;
+            width: auto;
         }
 
-        .file-upload-btn:hover {
+        .action-btn:hover {
             background: #ddd;
+        }
+
+        .action-btn.listening {
+            background: #ff4d4d;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -205,81 +213,155 @@
         <!-- Header -->
         <header>
             <div class="brand">
-                <h2>RON AI</h2>
-                <span>v3.0 Super</span>
+                <h2>RAZ 73</h2>
+                <span>Super Voice AI</span>
             </div>
             <div id="user-display" class="hidden" style="font-size: 13px; font-weight: normal;"></div>
         </header>
 
-        <!-- SCREEN 1: LOGIN / SIGN UP -->
+        <!-- SCREEN 1: LOGIN & LANGUAGE SETUP -->
         <div id="screen-auth" class="screen auth-screen">
             <div>
-                <h1>Welcome to RON</h1>
-                <p class="subtitle">Your Super Intelligent Study & Multi-Purpose Partner<br><small>Created by Ronish</small></p>
+                <h1>RAZ 73</h1>
+                <p class="subtitle">Your Super Voice Study & Multi-Purpose AI<br><small>Created by Ronish</small></p>
             </div>
             <div style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
                 <input type="text" id="username-input" placeholder="Enter your name...">
                 <select id="language-select">
-                    <option value="English">English</option>
-                    <option value="Spanish">Español (Spanish)</option>
-                    <option value="French">Français (French)</option>
-                    <option value="Mandarin">中文 (Mandarin)</option>
-                    <option value="Hindi">हिन्दी (Hindi)</option>
-                    <option value="Arabic">العربية (Arabic)</option>
-                    <option value="Japanese">日本語 (Japanese)</option>
-                    <option value="German">Deutsch (German)</option>
+                    <option value="en-US">English</option>
+                    <option value="es-ES">Español (Spanish)</option>
+                    <option value="fr-FR">Français (French)</option>
+                    <option value="zh-CN">中文 (Mandarin)</option>
+                    <option value="hi-IN">हिन्दी (Hindi)</option>
+                    <option value="ar-SA">العربية (Arabic)</option>
+                    <option value="ja-JP">日本語 (Japanese)</option>
+                    <option value="de-DE">Deutsch (German)</option>
                 </select>
-                <button onclick="startRonAI()">Initialize RON AI</button>
+                <button onclick="startRazAI()">Initialize RAZ 73</button>
             </div>
         </div>
 
-        <!-- SCREEN 2: MAIN CHAT & STUDY DASHBOARD -->
+        <!-- SCREEN 2: MAIN VOICE CHAT DASHBOARD -->
         <div id="screen-chat" class="screen hidden">
             <div id="chat-box" class="chat-box">
-                <!-- Dynamic messages go here -->
+                <!-- Messages populate here -->
             </div>
 
             <div id="image-preview-container" class="hidden" style="padding-bottom: 8px; font-size: 12px; color: #555;">
-                📎 Photo attached ready to send.
+                📎 Photo attached for voice & visual breakdown.
             </div>
 
             <div class="input-area">
-                <label for="image-input" class="file-upload-btn" title="Upload Photo">📷</label>
+                <label for="image-input" class="action-btn" title="Upload Photo">📷</label>
                 <input type="file" id="image-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
                 
-                <input type="text" id="user-input" placeholder="Ask RON anything or request a study session..." onkeypress="handleKeyPress(event)">
-                <button onclick="sendMessage()" style="width: auto; padding: 12px 18px;">Send</button>
+                <button id="mic-btn" class="action-btn" onclick="toggleVoiceInput()" title="Speak to RAZ 73">🎙️</button>
+
+                <input type="text" id="user-input" placeholder="Type or tap mic to talk..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" style="width: auto; padding: 12px 15px;">Send</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentUser = { name: "", language: "English" };
+        let currentUser = { name: "", language: "en-US", langName: "English" };
         let selectedImageBase64 = null;
+        let recognition = null;
+        let isListening = false;
 
-        function startRonAI() {
+        function startRazAI() {
             const nameInput = document.getElementById("username-input").value.trim();
-            const langInput = document.getElementById("language-select").value;
-
+            const langSelect = document.getElementById("language-select");
+            
             if (!nameInput) {
-                alert("Please enter your name to proceed, boss!");
+                alert("Please enter your name, boss!");
                 return;
             }
 
             currentUser.name = nameInput;
-            currentUser.language = langInput;
+            currentUser.language = langSelect.value;
+            currentUser.langName = langSelect.options[langSelect.selectedIndex].text;
 
-            // Switch screens
+            // Switch UI screens
             document.getElementById("screen-auth").classList.add("hidden");
             document.getElementById("screen-chat").classList.remove("hidden");
             
-            // Show user info in header
             const userDisplay = document.getElementById("user-display");
-            userDisplay.textContent = `User: ${currentUser.name} (${currentUser.language})`;
+            userDisplay.textContent = `${currentUser.name} (${currentUser.langName})`;
             userDisplay.classList.remove("hidden");
 
-            // Initial greeting from RON created by Ronish
-            appendMessage(`Hello ${currentUser.name}! I am **RON**, the super-powered AI created by **Ronish**. I am locked into **${currentUser.language}** mode. Whether you want to study complex subjects, solve edits, or explore multi-purpose tasks, I'm here. How can I assist you today?`, 'ai');
+            // Setup speech recognition if supported by browser
+            setupSpeechRecognition();
+
+            // Initial voice greeting from RAZ 73
+            const welcomeText = `Hello ${currentUser.name}! I am RAZ 73, your super AI created by Ronish. I am listening and ready to help you study, edit, or handle anything you need. Speak or type to me anytime!`;
+            appendMessage(welcomeText, 'ai');
+            speakText(welcomeText);
+        }
+
+        function setupSpeechRecognition() {
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (window.SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = currentUser.language;
+
+                recognition.onresult = function(event) {
+                    const speechToText = event.results[0][0].transcript;
+                    document.getElementById("user-input").value = speechToText;
+                    stopListeningState();
+                    sendMessage(); // Automatically send after speaking
+                };
+
+                recognition.onerror = function() {
+                    stopListeningState();
+                };
+
+                recognition.onend = function() {
+                    stopListeningState();
+                };
+            }
+        }
+
+        function toggleVoiceInput() {
+            if (!recognition) {
+                alert("Voice recognition is not supported on this browser. Try Chrome or Safari!");
+                return;
+            }
+
+            if (isListening) {
+                recognition.stop();
+                stopListeningState();
+            } else {
+                try {
+                    recognition.lang = currentUser.language;
+                    recognition.start();
+                    isListening = true;
+                    document.getElementById("mic-btn").classList.add("listening");
+                    document.getElementById("user-input").placeholder = "Listening... Speak now...";
+                } catch (e) {
+                    stopListeningState();
+                }
+            }
+        }
+
+        function stopListeningState() {
+            isListening = false;
+            const micBtn = document.getElementById("mic-btn");
+            if (micBtn) micBtn.classList.remove("listening");
+            const inputField = document.getElementById("user-input");
+            if (inputField) inputField.placeholder = "Type or tap mic to talk...";
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop any ongoing speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = currentUser.language;
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }
         }
 
         function handleImageUpload(event) {
@@ -305,7 +387,7 @@
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message", sender);
 
-            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Basic bold markdown parsing
+            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             messageDiv.innerHTML = formattedText;
 
             if (imgUrl) {
@@ -324,40 +406,37 @@
 
             if (!text && !selectedImageBase64) return;
 
-            // Display User Message
-            appendMessage(text || "Uploaded an image for analysis.", 'user', selectedImageBase64);
+            appendMessage(text || "Uploaded an image for RAZ 73 to analyze.", 'user', selectedImageBase64);
             
             const currentImg = selectedImageBase64;
-            
-            // Reset inputs
             inputField.value = "";
             selectedImageBase64 = null;
             document.getElementById("image-preview-container").classList.add("hidden");
             document.getElementById("image-input").value = "";
 
-            // Simulate RON Processing Super-Intelligently
             setTimeout(() => {
-                let aiResponse = generateRonResponse(text, currentImg);
+                let aiResponse = generateRazResponse(text, currentImg);
                 appendMessage(aiResponse, 'ai');
+                speakText(aiResponse); // RAZ 73 speaks the answer back to you out loud!
             }, 600);
         }
 
-        function generateRonResponse(query, img) {
+        function generateRazResponse(query, img) {
             let lowerQuery = query.toLowerCase();
 
             if (img) {
-                return `[Photo Analyzed in ${currentUser.language}] Boss ${currentUser.name}, I've processed this image using my multi-purpose visual engine created by Ronish. It contains visual text or study material. Would you like me to summarize it, solve equations found within it, or convert notes from it?`;
+                return `Visual data received, ${currentUser.name}! As RAZ 73, built by Ronish, I've scanned this image. It's fully processed. Let me know if you want me to read it out, break down study insights, or solve anything inside it.`;
             }
 
-            if (lowerQuery.includes('study') || lowerQuery.includes('exam') || lowerQuery.includes('learn')) {
-                return `As your dedicated study partner, I am ready to break down any topic for you in ${currentUser.language}. Give me a subject (like Mathematics, Physics, Programming, or History) and I will build a customized revision plan for you!`;
+            if (lowerQuery.includes('study') || lowerQuery.includes('learn') || lowerQuery.includes('exam')) {
+                return `Study mode is fully engaged. Tell me what topic you want to master, and RAZ 73 will guide you step by step.`;
             }
 
-            if (lowerQuery.includes('edit') || lowerQuery.includes('writing') || lowerQuery.includes('code')) {
-                return `[Editing Mode Active]: Send over your text, code snippet, or layout concepts. Ronish designed me to optimize and polish your work with hyper-accuracy!`;
+            if (lowerQuery.includes('edit') || lowerQuery.includes('code') || lowerQuery.includes('write')) {
+                return `Editing and creation protocols active. Share what you'd like me to refine or fix for you right now.`;
             }
 
-            return `I copy that, ${currentUser.name}. Operating at maximum capacity in **${currentUser.language}**. As RON, built by Ronish, I'm tracking your request. Let me know if you want to dive deeper into studies, document editing, or any other multi-purpose challenge!`;
+            return `I hear you loud and clear, ${currentUser.name}! RAZ 73 is operating at peak performance. What else should we conquer together today?`;
         }
     </script>
 </body>
